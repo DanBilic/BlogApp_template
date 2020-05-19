@@ -6,7 +6,8 @@ const errorHandler = (err, req, res, next) => {
   error.message = err.message;
 
   //  Log to console for developers
-  console.log(err.stack.red);
+  //    console.log(err.stack.red);
+  console.log(err);
 
   //  name of the error
   //    console.log(err.name);
@@ -15,6 +16,18 @@ const errorHandler = (err, req, res, next) => {
   if (err.name === "CastError") {
     const message = `Bootcamp not found with given id ${err.value}`;
     error = new CustomErrorResponse(message, 404);
+  }
+  //  mongoose duplictae key error -> code is 11000
+  if (err.code === 11000) {
+    const message = "Blog already exists please create a new one";
+    // 400 -> bad request
+    error = new CustomErrorResponse(message, 400);
+  }
+
+  //    mongoose validation error
+  if (err.name === "ValidationError") {
+    const message = Object.values(err.errors).map((value) => value.message);
+    error = new CustomErrorResponse(message, 400);
   }
 
   res.status(error.statusCode || 500).json({
