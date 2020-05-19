@@ -1,4 +1,5 @@
 const Blog = require("../models/Blog");
+const CustomErrorResponse = require("../utils/customErrorResponse");
 
 //@desc     GET all blogs
 //@route    GET /api/v1/blogs
@@ -23,12 +24,16 @@ exports.getBlog = async (req, res, next) => {
 
     //blog with given id does not exist but id is correctly formatted
     if (!blog) {
-      return res.status(400).json({ success: false, data: {}, meta_data: [] });
+      return new CustomErrorResponse(
+        `Blog not found with id of ${req.params.id}`,
+        404
+      );
     }
     res.status(200).json({ success: true, data: blog, meta_data: [] });
   } catch (error) {
     //error occurs by a not correctly formated id
-    res.status(400).json({ success: false, data: {}, meta_data: [] });
+    //  res.status(400).json({ success: false, data: {}, meta_data: [] });
+    next(error);
   }
 };
 

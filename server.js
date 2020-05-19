@@ -4,6 +4,7 @@ const customLogger = require("./middleware/customLogger");
 const morgan = require("morgan");
 const connectDB = require("./config/mongo_db");
 const colors = require("colors");
+const errorHandler = require("./middleware/error");
 
 //lade environment variablen
 dotenv.config({ path: "./config/config.env" });
@@ -28,6 +29,9 @@ if (process.env.NODE_ENV === "development") {
 
 //Mount routers
 app.use("/api/v1/blogs", blogs);
+
+// Middleware für die Fehlerbehandlung wird ganz zuletzt nach allen anderen app.use()- und Weiterleitungsaufrufen definiert.
+app.use(errorHandler);
 
 //default PORT ist 6000
 const PORT = process.env.PORT || 6000;
