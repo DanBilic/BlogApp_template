@@ -8,7 +8,7 @@ const colors = require("colors");
 const errorHandler = require("./middleware/error");
 const fileupload = require("express-fileupload");
 
-//lade environment variablen
+//load environment variables
 dotenv.config({ path: "./config/config.env" });
 
 //Connect to mongo DB
@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/v1/blogs", blogs);
 app.use("/api/v1/posts", posts);
 
-// Middleware für die Fehlerbehandlung wird ganz zuletzt nach allen anderen app.use()- und Weiterleitungsaufrufen definiert.
+// Middleware for error handling last!
 app.use(errorHandler);
 
 //default PORT ist 6000

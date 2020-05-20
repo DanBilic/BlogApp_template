@@ -30,7 +30,6 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
 //@route    POST /api/v1/blogs/:id
 //@acess    Private -> auth required
 exports.createBlog = asyncHandler(async (req, res, next) => {
-  //try catch bei fehlern der mongo validation -> required wurde nicht beachtet
   const blog = await Blog.create(req.body);
 
   //  201-> ressource created
@@ -42,7 +41,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 //@acess    Private -> auth required
 exports.updateBlog = async (req, res, next) => {
   const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
-    //das geupdatetet blog model (also das neue soll zurück gegebn werden)
+    //return new updated model instance
     new: true,
     runValidators: true,
   });
@@ -58,7 +57,7 @@ exports.updateBlog = async (req, res, next) => {
 //@desc     DELETE a blog
 //@route    DELETE /api/v1/blogs/:id
 //@acess    Private -> auth required
-//try catch drinnen gelassen zu demonstrationszwecken
+//try catch -> to show asyncHandler refactor
 exports.deleteBlog = async (req, res, next) => {
   try {
     const blog = await Blog.findById(req.params.id);
@@ -80,7 +79,6 @@ exports.deleteBlog = async (req, res, next) => {
 //@desc     upload photo for a blog
 //@route    PUT /api/v1/blogs/:id/photo
 //@acess    Private -> auth required
-//try catch drinnen gelassen zu demonstrationszwecken
 exports.blogPhotoUpload = asyncHandler(async (req, res, next) => {
   const blog = await Blog.findById(req.params.id);
   if (!blog) {

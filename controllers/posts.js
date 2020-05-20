@@ -13,7 +13,7 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
   if (req.params.blogId) {
     const posts = await Post.find({ blog: req.params.blogId });
 
-    //seperate respons for posts for a blog with id -> no populate needed
+    //seperate response for posts for a blog with id -> no populate needed
     res.status(200).json({
       success: true,
       count: posts.length,

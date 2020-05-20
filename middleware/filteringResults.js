@@ -25,11 +25,8 @@ const filteringResults = (model, populate) => async (req, res, next) => {
   query = model.find(JSON.parse(queryString));
 
   //SELECT field
-  //deswegen wurde das req.query objekt kopiert
-  //die selct werte werden mit komma aneinandergehängt -> select=name, description
   if (req.query.select) {
-    //split entfernt ',' aus einem strinf und gibt ein array zurück die die elemnte des strings enthalten die mit komma getrennt wurden
-    const fields = req.query.select.split(",").join(" "); //->join fügt das array zu einem string zusammen getrennt durch das zeichen das als paramter übergeben wurde
+    const fields = req.query.select.split(",").join(" ");
 
     query = query.select(fields);
   }
@@ -39,7 +36,7 @@ const filteringResults = (model, populate) => async (req, res, next) => {
     const sorting = req.query.sort.split(",").join(" ");
     query = query.sort(sorting);
   } else {
-    // - singnalisiert abscteigen nach cretedAt sortieren und + bedeutet aufsteigen
+    // - descending , + ascending
     query = query.sort("-createdAt");
   }
 

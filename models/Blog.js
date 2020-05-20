@@ -11,7 +11,7 @@ const BlogSchema = new Schema(
       trim: true,
       maxLength: [40, "name can not be any longer than 40 characters"],
     },
-    //URL firendly Version of the name -> Der Titel wird zu der-titel
+    //URL firendly Version of the name
     slug: String,
     description: {
       type: String,
@@ -58,7 +58,7 @@ BlogSchema.pre("save", function (next) {
   next();
 });
 
-//Cascade delete course when a bootcamp is deleted
+//Cascade delete when blog gets removed
 BlogSchema.pre("remove", async function (next) {
   console.log(`Posts being removed from blog ${this._id}`);
   await this.model("Post").deleteMany({ blog: this._id });
