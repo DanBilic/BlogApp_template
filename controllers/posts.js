@@ -50,7 +50,7 @@ exports.getPost = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desc     Add course
+//@desc     Add post
 //@route    POST /api/v1/blogs/:blogId/posts
 //@acess    Private
 exports.addPost = asyncHandler(async (req, res, next) => {
@@ -70,5 +70,50 @@ exports.addPost = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: post,
+  });
+});
+
+//@desc     Update post
+//@route    PUT /api/v1/posts/:id
+//@acess    Private
+exports.updatePost = asyncHandler(async (req, res, next) => {
+  let post = await Post.findById(req.params.id);
+
+  if (!post) {
+    return next(
+      new CustomErrorResponse(`No post with the id of ${req.params.id}`),
+      404
+    );
+  }
+
+  post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: post,
+  });
+});
+
+//@desc     Delete post
+//@route    DELETE /api/v1/posts/:id
+//@acess    Private
+exports.deletePost = asyncHandler(async (req, res, next) => {
+  const post = await Post.findById(req.params.id);
+
+  if (!post) {
+    return next(
+      new CustomErrorResponse(`No post with the id of ${req.params.id}`),
+      404
+    );
+  }
+
+  await post.remove();
+
+  res.status(200).json({
+    success: true,
+    data: {},
   });
 });
