@@ -8,6 +8,11 @@ const {
   blogPhotoUpload,
 } = require("../controllers/blogs");
 
+const Blog = require("../models/Blog");
+
+//PAGINATION, SELECTION, SORTING for endpoints ... as middleware
+const filteringResults = require("../middleware/filteringResults");
+
 // Include ohter ressource routers
 const postsRouter = require("./posts");
 
@@ -17,7 +22,10 @@ const router = express.Router();
 router.use("/:blogId/posts", postsRouter);
 
 // route '/' is mapped to /api/v1/blogs in server.js
-router.route("/").get(getBlogs).post(createBlog);
+router
+  .route("/")
+  .get(filteringResults(Blog, "posts"), getBlogs)
+  .post(createBlog);
 
 // route '/:id' is mapped to /api/v1/blogs/:id in server.js
 router.route("/:id").get(getBlog).put(updateBlog).delete(deleteBlog);

@@ -11,21 +11,17 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
   let query;
 
   if (req.params.blogId) {
-    query = Post.find({ blog: req.params.blogId });
-  } else {
-    query = Post.find().populate({
-      path: "blog",
-      select: "name description",
+    const posts = await Post.find({ blog: req.params.blogId });
+
+    //seperate respons for posts for a blog with id -> no populate needed
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      data: posts,
     });
+  } else {
+    res.status(200).json(res.filteredResults);
   }
-
-  const posts = await query;
-
-  res.status(200).json({
-    success: true,
-    count: posts.length,
-    data: posts,
-  });
 });
 
 //@desc     GET single post
