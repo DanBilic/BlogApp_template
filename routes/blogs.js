@@ -6,7 +6,14 @@ const {
   updateBlog,
   deleteBlog,
 } = require("../controllers/blogs");
+
+// Include ohter ressource routers
+const postsRouter = require("./posts");
+
 const router = express.Router();
+
+//re-route into other resource routers
+router.use("/:blogId/posts", postsRouter);
 
 // route '/' is mapped to /api/v1/blogs in server.js
 router.route("/").get(getBlogs).post(createBlog);

@@ -14,6 +14,7 @@ connectDB();
 
 //import Route dateien
 const blogs = require("./routes/blogs");
+const posts = require("./routes/posts");
 
 const app = express();
 
@@ -29,6 +30,7 @@ if (process.env.NODE_ENV === "development") {
 
 //Mount routers
 app.use("/api/v1/blogs", blogs);
+app.use("/api/v1/posts", posts);
 
 // Middleware für die Fehlerbehandlung wird ganz zuletzt nach allen anderen app.use()- und Weiterleitungsaufrufen definiert.
 app.use(errorHandler);
