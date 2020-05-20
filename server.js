@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const dotenv = require("dotenv");
 const customLogger = require("./middleware/customLogger");
@@ -5,6 +6,7 @@ const morgan = require("morgan");
 const connectDB = require("./config/mongo_db");
 const colors = require("colors");
 const errorHandler = require("./middleware/error");
+const fileupload = require("express-fileupload");
 
 //lade environment variablen
 dotenv.config({ path: "./config/config.env" });
@@ -27,6 +29,15 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // app.use(customLogger);
+
+// File upload middleware
+app.use(fileupload());
+
+//set static folder
+// path.join(__dirname, "public") -> joins files and folders together
+// !! static folder can be accessed in the browser with url:
+//localhost:6000/uploads/photo.jpg -> uploads is the static folder
+app.use(express.static(path.join(__dirname, "public")));
 
 //Mount routers
 app.use("/api/v1/blogs", blogs);
