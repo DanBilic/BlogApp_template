@@ -17,6 +17,7 @@ connectDB();
 //import Route dateien
 const blogs = require("./routes/blogs");
 const posts = require("./routes/posts");
+const auth = require("./routes/auth");
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //Mount routers
 app.use("/api/v1/blogs", blogs);
 app.use("/api/v1/posts", posts);
+app.use("/api/v1/auth", auth);
 
 // Middleware for error handling last!
 app.use(errorHandler);
