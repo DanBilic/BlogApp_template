@@ -18,6 +18,9 @@ const postsRouter = require("./posts");
 
 const router = express.Router();
 
+const { protectRoute } = require("../middleware/protectRoute");
+const { checkRoles } = require("../middleware/checkRoles");
+
 //re-route into other resource routers
 router.use("/:blogId/posts", postsRouter);
 
@@ -25,10 +28,16 @@ router.use("/:blogId/posts", postsRouter);
 router
   .route("/")
   .get(filteringResults(Blog, "posts"), getBlogs)
-  .post(createBlog);
+  .post(protectRoute, checkRoles("blogger"), createBlog);
 
 // route '/:id' is mapped to /api/v1/blogs/:id in server.js
-router.route("/:id").get(getBlog).put(updateBlog).delete(deleteBlog);
+router
+  .route("/:id")
+  .get(getBlog)
+  .put(protectRoute, checkRoles("blogger"), updateBlog)
+  .delete(protectRoute, checkRoles("blogger"), deleteBlog);
 
-router.route("/:id/photo").put(blogPhotoUpload);
+router
+  .route("/:id/photo")
+  .put(protectRoute, checkRoles("blogger"), blogPhotoUpload);
 module.exports = router;

@@ -62,9 +62,11 @@ exports.deleteBlog = async (req, res, next) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) {
-      return new CustomErrorResponse(
-        `Blog not found with id of ${req.params.id}`,
-        404
+      return next(
+        new CustomErrorResponse(
+          `Blog not found with id of ${req.params.id}`,
+          404
+        )
       );
     }
 
