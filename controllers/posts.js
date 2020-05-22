@@ -51,6 +51,7 @@ exports.getPost = asyncHandler(async (req, res, next) => {
 //@acess    Private
 exports.addPost = asyncHandler(async (req, res, next) => {
   req.body.blog = req.params.blogId;
+  req.body.user = req.user.id;
 
   const blog = await Blog.findById(req.params.blogId);
 
@@ -58,6 +59,17 @@ exports.addPost = asyncHandler(async (req, res, next) => {
     return next(
       new CustomErrorResponse(`No blog with the id of ${req.params.blogId}`),
       404
+    );
+  }
+
+  // check: is current_user the owner of the blog
+  // blog.user is a mongo _id
+  if (blog.user.toString() !== req.user.id) {
+    return next(
+      new CustomErrorResponse(
+        `User with id: ${req.user.id} is not authorized to create this post`,
+        401
+      )
     );
   }
 
@@ -82,6 +94,17 @@ exports.updatePost = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // check: is current_user the owner of the post
+  // blog.user is a mongo _id
+  if (post.user.toString() !== req.user.id) {
+    return next(
+      new CustomErrorResponse(
+        `User with id: ${req.user.id} is not authorized to update this post`,
+        401
+      )
+    );
+  }
+
   post = await Post.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -103,6 +126,17 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
     return next(
       new CustomErrorResponse(`No post with the id of ${req.params.id}`),
       404
+    );
+  }
+
+  // check: is current_user the owner of the post
+  // blog.user is a mongo _id
+  if (post.user.toString() !== req.user.id) {
+    return next(
+      new CustomErrorResponse(
+        `User with id: ${req.user.id} is not authorized to delete this post`,
+        401
+      )
     );
   }
 

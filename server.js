@@ -25,6 +25,7 @@ const app = express();
 //Body parser
 app.use(express.json());
 
+//cookieParser allows access to req.cookie and res.cookie
 app.use(cookieParser());
 
 //DEVELOPMENT logging middleware

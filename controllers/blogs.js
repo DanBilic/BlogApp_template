@@ -30,6 +30,9 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
 //@route    POST /api/v1/blogs/:id
 //@acess    Private -> auth required
 exports.createBlog = asyncHandler(async (req, res, next) => {
+  // add the current logged in user to the blog as owner of the blog by adding to req.body
+  req.body.user = req.user.id;
+
   const blog = await Blog.create(req.body);
 
   //  201-> ressource created
@@ -40,17 +43,31 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 //@route    PUT /api/v1/blogs/:id
 //@acess    Private -> auth required
 exports.updateBlog = async (req, res, next) => {
-  const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
+  let blog = await Blog.findById(req.params.id);
+
+  if (!blog) {
+    return next(
+      new CustomErrorResponse(`Blog not found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  // check: is current_user the owner of the blog
+  // blog.user is a mongo _id
+  if (blog.user.toString() !== req.user.id) {
+    return next(
+      new CustomErrorResponse(
+        `User with id: ${req.params.id} is not authorized to update this blog`,
+        404
+      )
+    );
+  }
+
+  blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
     //return new updated model instance
     new: true,
     runValidators: true,
   });
-  if (!blog) {
-    return new CustomErrorResponse(
-      `Blog not found with id of ${req.params.id}`,
-      404
-    );
-  }
+
   res.status(200).json({ success: true, data: blog, meta_data: [] });
 };
 
@@ -65,6 +82,17 @@ exports.deleteBlog = async (req, res, next) => {
       return next(
         new CustomErrorResponse(
           `Blog not found with id of ${req.params.id}`,
+          404
+        )
+      );
+    }
+
+    // check: is current_user the owner of the blog
+    // blog.user is a mongo _id
+    if (blog.user.toString() !== req.user.id) {
+      return next(
+        new CustomErrorResponse(
+          `User with id: ${req.params.id} is not authorized to delete this blog`,
           404
         )
       );
@@ -87,6 +115,17 @@ exports.blogPhotoUpload = asyncHandler(async (req, res, next) => {
     return new CustomErrorResponse(
       `Blog not found with id of ${req.params.id}`,
       404
+    );
+  }
+
+  // check: is current_user the owner of the blog
+  // blog.user is a mongo _id
+  if (blog.user.toString() !== req.user.id) {
+    return next(
+      new CustomErrorResponse(
+        `User with id: ${req.params.id} is not authorized to delete this blog`,
+        404
+      )
     );
   }
 
