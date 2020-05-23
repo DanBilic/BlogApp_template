@@ -132,3 +132,19 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 
   sendTokenResponse(user, 200, res);
 });
+
+//@desc     GET logout current logged in user
+//@route    GET /api/v1/auth/logout
+//@acess    Private
+exports.logoutUser = asyncHandler(async (req, res, next) => {
+  //access to the cookies in res/req.cookie becouse of cookieParser middleware
+  res.cookie("token", "none", {
+    //cookie expires in 5 seconds from logout
+    expires: new Date(Date.now() + 5 + 1000),
+  });
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
