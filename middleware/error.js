@@ -14,12 +14,12 @@ const errorHandler = (err, req, res, next) => {
 
   //    mongoose bad Object id
   if (err.name === "CastError") {
-    const message = `Blog not found with given id ${err.value}`;
+    const message = `Ressource not found with given id ${err.value}`;
     error = new CustomErrorResponse(message, 404);
   }
   //  mongoose duplictae key error -> code is 11000
   if (err.code === 11000) {
-    const message = "Blog already exists please create a new one";
+    const message = "Ressource already exists please create a new one";
     // 400 -> bad request
     error = new CustomErrorResponse(message, 400);
   }

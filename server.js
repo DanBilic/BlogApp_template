@@ -19,6 +19,7 @@ connectDB();
 const blogs = require("./routes/blogs");
 const posts = require("./routes/posts");
 const auth = require("./routes/auth");
+const reviews = require("./routes/reviews");
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/v1/blogs", blogs);
 app.use("/api/v1/posts", posts);
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/reviews", reviews);
 
 // Middleware for error handling last!
 app.use(errorHandler);

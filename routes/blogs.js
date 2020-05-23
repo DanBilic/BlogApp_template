@@ -15,6 +15,7 @@ const filteringResults = require("../middleware/filteringResults");
 
 // Include ohter ressource routers
 const postsRouter = require("./posts");
+const reviewsRouter = require("./reviews");
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ const { checkRoles } = require("../middleware/checkRoles");
 
 //re-route into other resource routers
 router.use("/:blogId/posts", postsRouter);
+router.use("/:blogId/reviews", reviewsRouter);
 
 // route '/' is mapped to /api/v1/blogs in server.js
 router

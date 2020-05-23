@@ -35,8 +35,7 @@ exports.getPost = asyncHandler(async (req, res, next) => {
 
   if (!post) {
     return next(
-      new CustomErrorResponse(`No post with the id of ${req.params.id}`),
-      404
+      new CustomErrorResponse(`No post with the id of ${req.params.id}`, 404)
     );
   }
 
@@ -57,8 +56,10 @@ exports.addPost = asyncHandler(async (req, res, next) => {
 
   if (!blog) {
     return next(
-      new CustomErrorResponse(`No blog with the id of ${req.params.blogId}`),
-      404
+      new CustomErrorResponse(
+        `No blog with the id of ${req.params.blogId}`,
+        404
+      )
     );
   }
 
@@ -89,8 +90,7 @@ exports.updatePost = asyncHandler(async (req, res, next) => {
 
   if (!post) {
     return next(
-      new CustomErrorResponse(`No post with the id of ${req.params.id}`),
-      404
+      new CustomErrorResponse(`No post with the id of ${req.params.id}`, 404)
     );
   }
 
@@ -124,8 +124,7 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
 
   if (!post) {
     return next(
-      new CustomErrorResponse(`No post with the id of ${req.params.id}`),
-      404
+      new CustomErrorResponse(`No post with the id of ${req.params.id}`, 404)
     );
   }
 
