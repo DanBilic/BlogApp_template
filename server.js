@@ -9,6 +9,11 @@ const colors = require("colors");
 const errorHandler = require("./middleware/error");
 const fileupload = require("express-fileupload");
 
+//security middleware
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const cors = require("cors");
+
 //load environment variables
 dotenv.config({ path: "./config/config.env" });
 
@@ -25,6 +30,21 @@ const app = express();
 
 //Body parser
 app.use(express.json());
+
+// set some headers for security
+app.use(helmet());
+
+//rate limit
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
+//activate cors
+app.use(cors());
+
+//  apply to all requests
+app.use(limiter);
 
 //cookieParser allows access to req.cookie and res.cookie
 app.use(cookieParser());
