@@ -7,7 +7,20 @@ const asyncHandler = require("../middleware/asyncHandler");
 //@route    GET /api/v1/blogs
 //@acess    Public
 exports.getBlogs = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.filteredResults);
+  res.status(200).json({
+    ...res.filteredResults,
+    metadata: [
+      { action: "get blog", method: "GET", href: "/api/v1/blogs/:blogId" },
+      { action: "update blog", method: "PUT", href: "/api/v1/blogs/:blogId" },
+      {
+        action: "delete blog",
+        method: "DELETE",
+        href: "/api/v1/blogs/:blogId",
+      },
+      { action: "create blog", method: "POST", href: "/api/v1/blogs/:blogId" },
+      { action: "logout", method: "GET", href: "/api/v1/auth/logout" },
+    ],
+  });
 });
 
 //@desc     GET single blog
@@ -23,7 +36,23 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
       404
     );
   }
-  res.status(200).json({ success: true, data: blog, meta_data: [] });
+  res.status(200).json({
+    success: true,
+    data: blog,
+    meta_data: [
+      {
+        action: "get all posts",
+        method: "GET",
+        href: "/api/v1/posts",
+      },
+      { action: "get all reviews", method: "GET", href: "/api/v1/reviews" },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
+  });
 });
 
 //@desc     CREATE a blog
@@ -36,7 +65,17 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
   const blog = await Blog.create(req.body);
 
   //  201-> ressource created
-  res.status(201).json({ success: true, data: blog, meta_data: [] });
+  res.status(201).json({
+    success: true,
+    data: blog,
+    meta_data: [
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
+  });
 });
 
 //@desc     UPDATE a blog
@@ -68,7 +107,22 @@ exports.updateBlog = async (req, res, next) => {
     runValidators: true,
   });
 
-  res.status(200).json({ success: true, data: blog, meta_data: [] });
+  res.status(200).json({
+    success: true,
+    data: blog,
+    meta_data: [
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+      {
+        action: "upload photo to a blog",
+        method: "PUT",
+        href: `/api/v1/blogs/${req.params.id}/photo`,
+      },
+    ],
+  });
 };
 
 //@desc     DELETE a blog
@@ -100,7 +154,17 @@ exports.deleteBlog = async (req, res, next) => {
 
     blog.remove();
 
-    res.status(200).json({ success: true, data: {}, meta_data: [] });
+    res.status(200).json({
+      success: true,
+      data: {},
+      meta_data: [
+        {
+          action: "get all blogs",
+          method: "GET",
+          href: "/api/v1/blogs",
+        },
+      ],
+    });
   } catch (error) {
     next(error);
   }
@@ -167,6 +231,18 @@ exports.blogPhotoUpload = asyncHandler(async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: file.name,
+      meta_data: [
+        {
+          action: "get all blogs",
+          method: "GET",
+          href: "/api/v1/blogs",
+        },
+        {
+          action: "get single blog",
+          method: "GET",
+          href: `/api/v1/blogs/${req.params.id}`,
+        },
+      ],
     });
   });
 });

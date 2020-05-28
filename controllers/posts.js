@@ -20,7 +20,36 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
       data: posts,
     });
   } else {
-    res.status(200).json(res.filteredResults);
+    res.status(200).json({
+      ...res.filteredResults,
+      meta_data: [
+        {
+          action: "get single post",
+          method: "GET",
+          href: "/api/v1/posts/:postId",
+        },
+        {
+          action: "update a post",
+          method: "PUT",
+          href: "/api/v1/posts/:postId",
+        },
+        {
+          action: "create a post",
+          method: "POST",
+          href: "/api/v1/posts/:postId",
+        },
+        {
+          action: "delete a post",
+          method: "DELETE",
+          href: "/api/v1/posts/:postId",
+        },
+        {
+          action: "get all blogs",
+          method: "GET",
+          href: "/api/v1/blogs",
+        },
+      ],
+    });
   }
 });
 
@@ -42,6 +71,18 @@ exports.getPost = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: post,
+    meta_data: [
+      {
+        action: "get posts",
+        method: "GET",
+        href: "/api/v1/posts",
+      },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
   });
 });
 
@@ -79,6 +120,18 @@ exports.addPost = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: post,
+    meta_data: [
+      {
+        action: "get posts",
+        method: "GET",
+        href: "/api/v1/posts",
+      },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
   });
 });
 
@@ -113,6 +166,18 @@ exports.updatePost = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: post,
+    meta_data: [
+      {
+        action: "get posts",
+        method: "GET",
+        href: "/api/v1/posts",
+      },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
   });
 });
 
@@ -144,5 +209,17 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: {},
+    meta_data: [
+      {
+        action: "get posts",
+        method: "GET",
+        href: "/api/v1/posts",
+      },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
   });
 });

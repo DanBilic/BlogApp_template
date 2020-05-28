@@ -79,7 +79,22 @@ const sendTokenResponse = (user, statusCode, res) => {
   res
     .status(statusCode)
     .cookie("token", token, options)
-    .json({ success: true, token });
+    .json({
+      success: true,
+      token,
+      metadata: [
+        {
+          action: "get current user",
+          method: "GET",
+          href: "/api/v1/auth/current_user",
+        },
+        {
+          action: "get all blogs",
+          method: "GET",
+          href: "/api/v1/blogs",
+        },
+      ],
+    });
 };
 
 //@desc     GET current logged in user
@@ -91,6 +106,14 @@ exports.getCurrentUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: user,
+    metadata: [
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+      { action: "logout", method: "GET", href: "/api/v1/auth/logout" },
+    ],
   });
 });
 
@@ -111,6 +134,18 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: user,
+    metadata: [
+      {
+        action: "get current user",
+        method: "GET",
+        href: "/api/v1/auth/current_user",
+      },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
   });
 });
 
@@ -146,5 +181,6 @@ exports.logoutUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: {},
+    metadata: [],
   });
 });

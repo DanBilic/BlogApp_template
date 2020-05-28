@@ -18,9 +18,50 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
       success: true,
       count: reviews.length,
       data: reviews,
+      meta_data: [
+        {
+          action: "get a review",
+          method: "GET",
+          href: "/api/v1/reviews/:reviewId",
+        },
+        {
+          action: "update a review",
+          method: "PUT",
+          href: "/api/v1/reviews/:reviewId",
+        },
+        {
+          action: "create a review",
+          method: "POST",
+          href: "/api/v1/reviews/:reviewId",
+        },
+        {
+          action: "delete a review",
+          method: "DELETE",
+          href: "/api/v1/reviews/:reviewId",
+        },
+        {
+          action: "get all blogs",
+          method: "GET",
+          href: "/api/v1/blogs",
+        },
+      ],
     });
   } else {
-    res.status(200).json(res.filteredResults);
+    res.status(200).json({
+      ...res.filteredResults,
+      meta_data: [
+        {
+          action: "get reviews",
+          method: "GET",
+          href: "/api/v1/reviews",
+        },
+        {
+          action: "get all blogs",
+          method: "GET",
+          href: "/api/v1/blogs",
+        },
+      ],
+    });
   }
 });
 
@@ -43,6 +84,18 @@ exports.getReview = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: review,
+    meta_data: [
+      {
+        action: "get reviews",
+        method: "GET",
+        href: "/api/v1/reviews",
+      },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
   });
 });
 
@@ -70,6 +123,18 @@ exports.addReview = asyncHandler(async (req, res, next) => {
   res.status(201).json({
     success: true,
     data: review,
+    meta_data: [
+      {
+        action: "get reviews",
+        method: "GET",
+        href: "/api/v1/reviews",
+      },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
   });
 });
 
@@ -104,6 +169,18 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: review,
+    meta_data: [
+      {
+        action: "get reviews",
+        method: "GET",
+        href: "/api/v1/reviews",
+      },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
   });
 });
 
@@ -135,5 +212,17 @@ exports.deleteReview = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: {},
+    meta_data: [
+      {
+        action: "get reviews",
+        method: "GET",
+        href: "/api/v1/reviews",
+      },
+      {
+        action: "get all blogs",
+        method: "GET",
+        href: "/api/v1/blogs",
+      },
+    ],
   });
 });
